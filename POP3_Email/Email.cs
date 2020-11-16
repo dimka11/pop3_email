@@ -10,5 +10,16 @@ namespace POP3_Email
     {
         public string From { get; set; }
         public string Subject { get; set; }
+
+        public Email(string from, string subject)
+        {
+            From = from;
+            Subject = subject;
+        }
+
+        public Email()
+        {
+            
+        }
     }
 }

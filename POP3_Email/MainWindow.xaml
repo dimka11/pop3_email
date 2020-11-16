@@ -5,8 +5,49 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:POP3_Email"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="800" MinHeight="450" MinWidth="800">
     <Grid>
-        
+        <StackPanel HorizontalAlignment="Left" Height="418" Margin="4,4,4,4" VerticalAlignment="Top" Width="792" Orientation="Horizontal">
+            <Border BorderBrush="Black" BorderThickness="0" Width="427">
+                <DataGrid Name="EmailGrid" ItemsSource="{Binding Source=EList}" AutoGenerateColumns="False" HorizontalAlignment="Stretch" 
+                          HorizontalContentAlignment="Stretch" 
+                          ColumnWidth="*"
+                          IsReadOnly="True">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Тема сообщения"  Binding="{Binding From}"/>
+                        <DataGridTextColumn Header="Отправитель" Binding="{Binding Subject}" />
+                        </DataGrid.Columns>
+                </DataGrid>
+            </Border>
+            <Border BorderBrush="Black" BorderThickness="0" Width="365">
+                <StackPanel>
+                    <Border BorderBrush="Black" BorderThickness="0" Height="100">
+                        <Grid>
+                            <Label Content="Адрес сервера" Height="28" HorizontalAlignment="Left" Name="BaseLabel" VerticalAlignment="Top" Margin="24,0,0,0" />
+                            <TextBox Name="ServerName" Height="20" Margin="24,26,64,0" VerticalAlignment="Top" Text="pop3.yandex.ru" />
+                        </Grid>
+                    </Border>
+                    <Border BorderBrush="Black" BorderThickness="0" Height="100">
+                        <Grid>
+                            <Label Content="Имя пользователя" Height="28" HorizontalAlignment="Left" Name="BaseLabel1" VerticalAlignment="Top" Margin="24,0,0,0" />
+                            <TextBox Name="UserName" Height="20" Margin="24,26,64,0" VerticalAlignment="Top" Text="groupsib701o@yandex.ru"/>
+                        </Grid>
+                    </Border>
+                    <Border BorderBrush="Black" BorderThickness="0" Height="100">
+                        <Grid>
+                            <Label Content="Пароль" Height="28" HorizontalAlignment="Left" Name="BaseLabel2" VerticalAlignment="Top" Margin="24,0,0,0" />
+                            <PasswordBox Name="UserPassword" Height="20" Margin="24,26,64,0" VerticalAlignment="Top" Password="omgusib701o"/>
+                        </Grid>
+                    </Border>
+                    <Border BorderBrush="Black" BorderThickness="0" Height="100">
+                        <StackPanel Orientation="Horizontal">
+                            <Button Name="ButtonUpdate" Content="Обновить" Margin="24,16,24,48" Width="124" Click="ButtonUpdate_OnClick"/>
+                            <Button Name="ButtonSave" Content="Сохранить" Margin="24,16,24,48" Width="124" Click="ButtonSave_OnClick"/>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+
     </Grid>
 </Window>

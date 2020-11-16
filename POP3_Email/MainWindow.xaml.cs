@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -23,12 +24,13 @@ namespace POP3_Email
         private EmailSettings settings;
         private int email_count = -1;
         private int _messageSavedToFile = 0;
+        List<Email> list = null;
         public MainWindow()
         {
             InitializeComponent();
 
             settings = new EmailSettings(ServerName.Text, UserName.Text, UserPassword.Password);
-            // UpdateEmailList(); // disable due the app is too long time start up
+            UpdateEmailList();
         }
 
         private void ButtonUpdate_OnClick(object sender, RoutedEventArgs e)
@@ -44,12 +46,19 @@ namespace POP3_Email
 
         private void UpdateEmailList()
         {
+            if (list != null)
+            {
+                EmailGrid.ItemsSource = list;
+            }
+
             var worker = new EmailWorker(settings);
             if (!worker.Run())
             {
                 MessageBox.Show("Авторизация не удалась!");
                 return;
             }
+
+            SaveMsgToFile(worker);
 
             if (email_count == -1)
             {
@@ -65,15 +74,23 @@ namespace POP3_Email
                 }
             }
 
-            var list = worker.GetEmailList();
+            new Thread(() =>
+            {
+                Thread.CurrentThread.IsBackground = true;
+                list = worker.GetEmailList();
+            }).Start();
 
             EmailGrid.ItemsSource = list;
+        }
 
+        void SaveMsgToFile(EmailWorker worker)
+        {
             if ((bool)SaveToFile.IsChecked)
             {
                 if (_messageSavedToFile == 0)
                 {
                     worker.SaveMessageToFile();
+                    _messageSavedToFile = 1;
                 }
                 else
                 {
@@ -81,18 +98,10 @@ namespace POP3_Email
                     if (email_count != new_count)
                     {
                         worker.SaveMessageToFile();
+                        _messageSavedToFile = 1;
                     }
                 }
             }
-
-            // Заглушка для грида
-            // List<Email> emailList = new List<Email>
-            // {
-            //     new Email { From= "iPhone 6S", Subject= "Apple" },
-            //     new Email { From="Lumia 950", Subject="Microsoft" },
-            //     new Email { From="Nexus 5X", Subject="Google" }
-            // };
-            // EmailGrid.ItemsSource = emailList;
         }
     }
 }

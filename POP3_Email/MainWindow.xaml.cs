@@ -42,7 +42,7 @@ namespace POP3_Email
             settings = new EmailSettings(ServerName.Text, UserName.Text, UserPassword.Password);
         }
 
-        private async void UpdateEmailList()
+        private void UpdateEmailList()
         {
             var worker = new EmailWorker(settings);
             if (!worker.Run())
